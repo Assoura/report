@@ -8,6 +8,7 @@ import matplotlib.colors as colors
 import matplotlib.ticker as ticker
 from matplotlib.colors import LinearSegmentedColormap
 import time
+import datetime
 from math import sin, cos, atan2, radians
 import os
 
@@ -124,7 +125,8 @@ def f_post(spot_f,prev,path,Max=1e6):
         ax.get_yaxis().set_major_formatter(ticker.FuncFormatter(lambda x, p: time.strftime('%a %d, %Hh',time.localtime(x))))
         ax.get_xaxis().set_major_formatter(ticker.FuncFormatter(lambda x, p: top2bot[list(dist).index(x)]))
         plt.sca(ax); plt.xticks(rotation=15,ha='right'); plt.colorbar(cb,ax=ax,format=f[i],ticks=ticks[i])
-    fig.subplots_adjust(left=0.20, bottom=0.06, right=1.0, top=0.96, wspace=0.0, hspace=0.5)
+    plt.suptitle('report de : '+str(datetime.datetime.now()).split(' ')[1].split('.')[0])
+    fig.subplots_adjust(left=0.20, bottom=0.06, right=1.0, top=0.95, wspace=0.0, hspace=0.5)
     img_path= os.path.join(path,'report.png')
     fig.savefig(img_path, dpi=100)
     plt.close('all')
@@ -154,7 +156,7 @@ def f_best(prev,spots,path,ville='Paris-France'):
     table = table.sort_values('(km)')
     table = table[(table.iloc[:,:-1].T >= 2).any()]
     del table.index.name
-    table.columns.name = '_Spots (>2*)__'
+    table.columns.name = str(datetime.datetime.now()).split(' ')[1].split('.')[0]
     os.chdir(path)
     table.to_html('table.html')
     if ville == 'Paris-France' : suf = ''
@@ -165,9 +167,15 @@ def f_best(prev,spots,path,ville='Paris-France'):
 
 def push(path = os.path.join('/','home','pi','Bureau','Mirmoc_is_back')):
     os.chdir(path)
-    run=['git add *.png','git commit -m "maj"','git push','git fetch --all','git reset --hard origin/master','git pull origin master']
+    run=['git add *.png','git commit -m "maj"','git push']
+    for c in run: os.system(c)
+    
+def pull(path = os.path.join('/','home','pi','Bureau','Mirmoc_is_back')):
+    os.chdir(path)
+    run=['git fetch --all','git reset --hard origin/master','git pull origin master']
     for c in run: os.system(c)
 
+pull()    
 rep = os.path.join('/','home','pi','Bureau','Mirmoc')
 Git = os.path.join('/','home','pi','Bureau','Mirmoc_is_back')
 spots = ['Calais', 'Cap-Gris-Nez', 'Wimereux', 'Yport', 'Vaucottes', 'Etretat', 'Sainte-Adresse', 'Trouville', 'LAnse-du-Brick', 'Collignon', 'Siouville', 'Dielette', 'Le-Rozel', 'Surtainville', 'Hatainville', 'Plage-du-Sillon-St-Malo', 'Les-Longchamps', 'Cap-Frehel', 'Trestraou', 'Pors-Ar-Villec-Locquirec', 'Le-Dossen', 'La-Mauvaise-Greve', 'St-Pabu', 'Lampaul-Ploudalmezeau', 'Penfoul', 'Le-Gouerou', 'Blancs-Sablons', 'Porsmilin', 'Dalbosc', 'Le-Petit-Minou', 'Anse-de-Pen-hat', 'Kerloch', 'Pointe-de-Dinan', 'La-Palue', 'Cap-de-la-Chevre', 'Pors-ar-Vag', 'Les-Roches-Blanches-Pointe-Leyde', 'Porz-Theolen', 'Baie-des-Trepasses-Lescoff', 'Saint-Tugen', 'Pointe-de-Lervily', 'La-Gamelle', 'Gwendrez', 'Fouesnou', 'La-Torche', 'Porzcarn', 'Lesconil', 'Le-Kerou', 'Plage-du-Loch', 'Guidel-Les-Kaolins', 'Toulhars', 'Gavres', 'Etel', 'Penthievre', 'La-Courance', 'LErmitage', 'Gohaud', 'Noirmoutier', 'St-jean-de-monts', 'Les-Dunes', 'Sauveterre', 'LAubraie', 'Les-Sables-dOlonne', 'Saint-Nicolas', 'Les-Conches-Bud-Bud', 'Le-Lizay', 'Les-Boulassiers', 'St-Denis', 'Les-Huttes', 'Chassiron', 'Les-Allassins', 'St-Trojan', 'La-Cote-Sauvage', 'Le-Verdon', 'Pontaillac', 'Soulac', 'LAmelie', 'Le-Gurp', 'Montalivet', 'Le-Truc-Vert', 'LHorizon', 'La-Pointe', 'La-Salie', 'Messanges', 'Vieux-Boucau', 'Casernes', 'Le-Penon', 'Les-Bourdaines', 'Les-Estagnots', 'Les-Culs-Nus', 'Hossegor-La-Graviere', 'Hossegor-La-Nord', 'Hossegor-La-Sud', 'LEstacade', 'Le-Prevent', 'Le-Santocha', 'Capbreton-La-Piste-VVF', 'Labenne-Ocean', 'Ondres-Plage', 'Tarnos','La-Barre', 'Les-Cavaliers', 'La-Madrague', 'Les-Corsaires', 'Marinella', 'Sables-dOr', 'Le-Club', 'Le-VVF', 'Biarritz-Grande-Plage', 'Cote-des-Basques', 'Ilbarritz', 'Erretegia', 'Bidart', 'Parlementia', 'Guethary-Avalanche', 'Les-Alcyons', 'Guethary', 'Lafitenia', 'Erromardie', 'Sainte-Barbe', 'Ciboure-Socoa', 'Belharra-Perdun', 'Hendaye-Plage']
@@ -177,4 +185,3 @@ prev,spots = f_post(spots,prev,Git)
 f_best(prev,spots,Git)
 f_best(prev,spots,Git,'Rennes-France')
 push()
-#
