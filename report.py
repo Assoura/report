@@ -154,7 +154,7 @@ def f_best(prev,spots,path,ville='Paris-France'):
     table = table.sort_values('(km)')
     table = table[(table.iloc[:,:-1].T >= 2).any()]
     del table.index.name
-    table.columns.name = '_Spots (>2*)_'
+    table.columns.name = '_Spots (>2*)__'
     os.chdir(path)
     table.to_html('table.html')
     if ville == 'Paris-France' : suf = ''
