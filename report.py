@@ -159,7 +159,7 @@ def f_best(prev,spots,path,ville='Paris-France'):
     table.to_html('table.html')
     if ville == 'Paris-France' : suf = ''
     else : suf = '_'+ville.split('-')[0]
-    os.system('wkhtmltoimage -f png --width 0 table.html table'+suf+'.png')
+    os.system('xvfb-run wkhtmltoimage -f png --width 0 table.html table'+suf+'.png')
     os.system('rm table.html')
     return table
 
