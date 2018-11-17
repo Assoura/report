@@ -139,8 +139,10 @@ def f_best(prev,spots,path,ville='Paris-France'):
     #prev = pd.read_csv('notes.csv').set_index('Unnamed: 0').sort_index()
     prev = prev['R_solidRating'].sort_index()
     spots = spots.reset_index().set_index('index')
-    latlong = f_loc(ville)
-    latlong = [max(latlong),min(latlong)]
+    #latlong = f_loc(ville)
+    #latlong = [max(latlong),min(latlong)]
+    if 'Paris' in ville : latlong = [48.864716,2.349014]
+    else : latlong = [48.11198,-1.67429]
     lat1 = radians(latlong[0]); lon1 = radians(latlong[1])
     spots['dlon'] = spots[1].apply(radians)-lon1
     spots['dlat'] = spots[0].apply(radians)-lat1
